@@ -15,9 +15,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className="bg-gray-100 antialiased text-gray-800">
         <div className="w-full h-screen flex">
-          {/* Chat Area */}
           <main className="flex-1 flex flex-col">
-            {/* Componente Conversa */}
             <div className="flex-1 bg-gray-100">
               {children}
             </div>
