@@ -20,5 +20,7 @@ export async function POST(req: Request) {
     page,
   });
   console.log("RESPOSTA OPEN AI", result);
+  const process = result.toDataStreamResponse();
+
   return result.toDataStreamResponse();
 }
