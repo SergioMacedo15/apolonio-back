@@ -31,9 +31,9 @@ interface SendMessageProps {
   textStream: string;
 }
 interface BuildStreamTextProps {
-  history: ContextAPIProps[];
+  messages: ContextAPIProps[];
   tools?: AIToolsProps; // MELHORAR ISSO AQUI
-  prompt: string;
+  page: any;
 }
 
 export default class OpenAIService {
@@ -48,28 +48,31 @@ export default class OpenAIService {
   }
 
   buildStreamText({
-    history,
+    messages,
     tools,
-    prompt,
+    page,
   }: BuildStreamTextProps): StreamTextResult<{}, never> {
     const streamTextComponent = streamText({
       model: openai(this.tModel),
       system: this.mood,
-      messages: history,
-      prompt,
+      messages,
       tools: Object.entries(aiTools).reduce((acc, [name, info]) => {
         return {
           ...acc,
           [name]: tool({
             description: info.description,
             parameters: info.schema,
-            // execute: info.execute,
+            execute: async (input) => {
+              const response = await info.execute(page, input);
+              console.log("executou", response);
+              return response || {};
+            },
           }),
         };
       }, {}),
     });
 
-    return { ...streamTextComponent };
+    return streamTextComponent;
   }
 
   async streamMessage(textStream: any) {
