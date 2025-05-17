@@ -1,6 +1,6 @@
 import { aiTools, type AIToolsProps } from "@/aiTools";
 import { openai } from "@ai-sdk/openai";
-import { streamText, tool } from "ai";
+import { streamText, tool, type StreamTextResult } from "ai";
 import { createStreamableValue } from "ai/rsc";
 
 type OpenAIModel =
@@ -32,7 +32,7 @@ interface SendMessageProps {
 }
 interface BuildStreamTextProps {
   history: ContextAPIProps[];
-  tools: AIToolsProps; // MELHORAR ISSO AQUI
+  tools?: AIToolsProps; // MELHORAR ISSO AQUI
   prompt: string;
 }
 
@@ -47,7 +47,11 @@ export default class OpenAIService {
     this.mood = mood;
   }
 
-  buildStreamText({ history, tools, prompt }: BuildStreamTextProps) {
+  buildStreamText({
+    history,
+    tools,
+    prompt,
+  }: BuildStreamTextProps): StreamTextResult<{}, never> {
     const streamTextComponent = streamText({
       model: openai(this.tModel),
       system: this.mood,
@@ -57,17 +61,18 @@ export default class OpenAIService {
         return {
           ...acc,
           [name]: tool({
-            description: "",
+            description: info.description,
             parameters: info.schema,
-            execute: info.execute,
+            // execute: info.execute,
           }),
         };
       }, {}),
     });
+
     return { ...streamTextComponent };
   }
 
-  async sendMessage({ textStream }: SendMessageProps) {
+  async streamMessage(textStream: any) {
     try {
       const stream = createStreamableValue();
       for await (const text of textStream) {
