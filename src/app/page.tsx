@@ -1,7 +1,8 @@
 import Sidebar from "@/app/components/Sidebar";
-import Header from "@/app/components/Header";
+import Header from "@/app/components/HeaderSidebar";
 import SearchInput from "@/app/components/SearchInput";
 import ConversationList from "@/app/components/ConversationList";
+import HeaderChat from "@/app/components/HeaderChat";
 
 export default function Home() {
   return (
@@ -17,9 +18,8 @@ export default function Home() {
 
       {/* Área de Chat */}
       <div className="flex-1 flex flex-col">
-        {/* Componente Chats (Listagem de conversas) */}
         <div className="border-b border-gray-600 bg-gray-800 h-[10%] text-white">
-          {/* Header da Conversa */}
+          <HeaderChat />
         </div>
 
         {/* Componente Chat (Mensagens da Conversa) */}

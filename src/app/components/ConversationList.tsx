@@ -3,6 +3,12 @@ import ConversationItem from "@/app/components/ConversationItem";
 const conversations = [
   {
     profileImage: "/profile.png",
+    name: "Vó Surda",
+    lastMessage: "Tá bem",
+    time: "15:11",
+  },
+  {
+    profileImage: "/profile.png",
     name: "João Silva",
     lastMessage: "Tudo certo para amanhã?",
     time: "14:32",
