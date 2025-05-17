@@ -35,6 +35,7 @@ export default class OpenAIService {
   private tModel: OpenAIModel;
   private mood: string;
   public god: any;
+  public stream: SendMessageProps | any;
 
   constructor(apiModel: OpenAIModel, mood: string) {
     this.tModel = apiModel;
@@ -56,7 +57,7 @@ export default class OpenAIService {
       for await (const text of message) {
         stream.update(text);
       }
-      stream.done;
+      this.stream = stream.done;
     } catch (error) {
       console.log("erro de envio de mensagem ", error);
     }
