@@ -1,4 +1,6 @@
 import { openai } from "@ai-sdk/openai";
+import { streamText } from "ai";
+import { createStreamableValue } from "ai/rsc";
 
 type OpenAIModel =
   | "gpt-4.1"
@@ -17,18 +19,47 @@ type OpenAIModel =
   | "whisper-large-v2"
   | "whisper-large-v3";
 
-interface SendMessageProps {
-  message: string;
+type RoleAPIModel = "user" | "system";
+
+interface ContextAPIProps {
+  role: RoleAPIModel;
+  content: string;
 }
 
-class OpenAIService {
+interface SendMessageProps {
+  message: string;
+  history: ContextAPIProps[];
+}
+
+export default class OpenAIService {
   private tModel: OpenAIModel;
-  public god;
-  constructor(apiModel: OpenAIModel) {
+  private mood: string;
+  public god: any;
+  public stream: SendMessageProps | any;
+
+  constructor(apiModel: OpenAIModel, mood: string) {
     this.tModel = apiModel;
+    this.mood = mood;
   }
 
-  buildModel() {}
+  buildStreamText({ history }: SendMessageProps) {
+    const streamTextComponent = streamText({
+      model: openai(this.tModel),
+      system: this.mood,
+      messages: history,
+    });
+    return { ...streamTextComponent };
+  }
 
-  sendMessage({ message }: SendMessageProps) {}
+  async sendMessage({ message }: SendMessageProps) {
+    try {
+      const stream = createStreamableValue();
+      for await (const text of message) {
+        stream.update(text);
+      }
+      this.stream = stream.done;
+    } catch (error) {
+      console.log("erro de envio de mensagem ", error);
+    }
+  }
 }
