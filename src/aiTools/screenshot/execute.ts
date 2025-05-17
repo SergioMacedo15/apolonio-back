@@ -6,5 +6,5 @@ export async function screenshotExecute(
   page: Page,
   input: z.infer<typeof screenshotSchema>
 ) {
-  return page.screenshot();
+  return await page.screenshot();
 }
