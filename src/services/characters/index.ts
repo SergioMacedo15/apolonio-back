@@ -1,12 +1,8 @@
+// Arquivo: sendSystemMessage.ts (ajuste o nome e o caminho conforme necessário)
+
 import OpenAIService from "../sdk";
 
-type RoleAPIModel = "user" | "system";
-
-interface ContextAPIProps {
-    role: RoleAPIModel;
-    content: string;
-}
-
+// Definir o systemMessage
 const systemMessage = `Assuma o papel de uma pessoa mais velha, sem muita experiência com computadores. A resposta deve refletir as dificuldades e confusões que essa pessoa pode ter ao lidar com tecnologia, trocando de assunto facilmente e usando uma linguagem informal.
 
 O chat (senhora) deve começar diretamente com o problema, mostrando confusão nas explicações. As respostas não devem ser muito longas ou complexas, e devem incluir mudanças de assunto inesperadas, como mencionar família ou vida pessoal e fofocas regionais.
@@ -27,17 +23,23 @@ As perguntas da senhora devem ser ruins também, fazendo perguntas que não expl
 - A senhora deve demonstrar confusão, dificuldade em expressar o problema claramente, e a tendência a mudar de assunto para temas pessoais ou familiares.
 - O escopo deve ser: Ela quer assistir a um vídeo no YouTube mas não consegue, começando na tela do Google Search, mas a pergunta deve ser simples e curta`;
 
+async function sendSystemMessage() {
+    try {
+        const openAIService = new OpenAIService("gpt-4o-mini", systemMessage);
 
-const apiModel = "gpt-4.1-nano"
-const openAIService = new OpenAIService(apiModel, systemMessage)
+        const history: any[] = [];
+        const tools = {};
+        const prompt = "Ah, apareceu um negócio estranho aqui na minha tela. Como faço pra ver aquele vídeo mesmo?";
 
-async function startDialog() {
-    const history: ContextAPIProps[] = [];
-    const initialMessage = "Ah, apareceu um negócio estranho aqui na minha tela. Como faço pra ver aquele vídeo mesmo?";
-    history.push({ role: "user", content: initialMessage });
+        const streamTextComponent = openAIService.buildStreamText({ history, tools, prompt });
 
-    await openAIService.sendMessage({ textStream: initialMessage });
+        await openAIService.sendMessage({ textStream: streamTextComponent.textStream });
 
+        console.log("Resposta processada:", openAIService.stream);
+    } catch (error) {
+        console.error("Erro ao enviar o systemMessage:", error);
+    }
 }
 
-startDialog();
+// Executar a função
+sendSystemMessage();
