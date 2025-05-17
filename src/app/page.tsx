@@ -3,6 +3,7 @@ import Header from "@/app/components/HeaderSidebar";
 import SearchInput from "@/app/components/SearchInput";
 import ConversationList from "@/app/components/ConversationList";
 import HeaderChat from "@/app/components/HeaderChat";
+import Chat from "@/app/components/Chat";
 
 export default function Home() {
   return (
@@ -22,13 +23,8 @@ export default function Home() {
           <HeaderChat />
         </div>
 
-        {/* Componente Chat (Mensagens da Conversa) */}
-        <div className="flex-1 bg-gray-700">
-          {/* Mensagens da Conversa */}
-        </div>
-
-        <div className="border-b border-gray-600 bg-gray-800 h-[10%] text-white">
-          {/* Input da Conversa */}
+        <div className="flex-1">
+          <Chat />
         </div>
       </div>
     </div>
