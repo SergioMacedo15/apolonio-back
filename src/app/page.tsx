@@ -1,12 +1,18 @@
+import Sidebar from "@/app/components/Sidebar";
+import Header from "@/app/components/Header";
+import SearchInput from "@/app/components/SearchInput";
+import ConversationList from "@/app/components/ConversationList";
+
 export default function Home() {
   return (
     <div className="w-full h-full flex">
-      {/* Sidebar */}
       <aside className="w-[5%] border-r border-gray-600 bg-gray-900 text-white">
-        {/* Componente Sidebar */}
+        <Sidebar />
       </aside>
       <aside className="w-[28%] border-r border-gray-600 bg-gray-900 text-white">
-        {/* Componente Sidebar */}
+        <Header />
+        <SearchInput />
+        <ConversationList />
       </aside>
 
       {/* Área de Chat */}
