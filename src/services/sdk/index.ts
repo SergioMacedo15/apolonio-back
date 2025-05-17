@@ -28,11 +28,12 @@ interface ContextAPIProps {
 }
 
 interface SendMessageProps {
-  message: string;
+  textStream: string;
 }
 interface BuildStreamTextProps {
   history: ContextAPIProps[];
   tools: AIToolsProps; // MELHORAR ISSO AQUI
+  prompt: string;
 }
 
 export default class OpenAIService {
@@ -46,11 +47,12 @@ export default class OpenAIService {
     this.mood = mood;
   }
 
-  buildStreamText({ history, tools }: BuildStreamTextProps) {
+  buildStreamText({ history, tools, prompt }: BuildStreamTextProps) {
     const streamTextComponent = streamText({
       model: openai(this.tModel),
       system: this.mood,
       messages: history,
+      prompt,
       tools: Object.entries(aiTools).reduce((acc, [name, info]) => {
         return {
           ...acc,
@@ -65,10 +67,10 @@ export default class OpenAIService {
     return { ...streamTextComponent };
   }
 
-  async sendMessage({ message }: SendMessageProps) {
+  async sendMessage({ textStream }: SendMessageProps) {
     try {
       const stream = createStreamableValue();
-      for await (const text of message) {
+      for await (const text of textStream) {
         stream.update(text);
       }
       this.stream = stream.done;
