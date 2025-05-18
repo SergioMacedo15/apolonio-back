@@ -1,68 +1,136 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ConversationItem from "@/app/components/ConversationItem";
 import SearchInput from "@/app/components/SearchInput";
 
-const conversations = [
+interface Conversation {
+  profileImage: string;
+  name: string;
+  lastMessage: string;
+  time: string;
+  unreadCount?: number;
+}
+
+const conversations: Conversation[] = [
   {
     profileImage: "/profile-old-woman.jpg",
     name: "Vó",
     lastMessage: "Tá bem",
-    time: "14:11",
+    time: "",
+    unreadCount: 1,
   },
   {
-    profileImage: "/profile.png",
-    name: "João Agiota",
-    lastMessage: "Gravando aúdio...",
-    time: "13:54",
-  },
-  {
-    profileImage: "/profile-tecnico.jpg",
-    name: "Técnico Assistência",
-    lastMessage: "Sua placa queimou",
-    time: "12:24",
-  },
-  {
-    profileImage: "/profile-chefe.jpg",
-    name: "Chefe",
-    lastMessage: "Passa no RH amanhã",
-    time: "11:41",
-  },
-  {
-    profileImage: "/profile-mecanico.jpg",
-    name: "Tião Mecânico",
-    lastMessage: "🎤 8:23",
-    time: "10:32",
+    profileImage: "/profile-familia.jpg",
+    name: "Família Buscapé",
+    lastMessage: "Prima Fernanda: Tio Paulo seu corno",
+    time: "",
+    unreadCount: 1,
   },
   {
     profileImage: "/profile-namorada.jpg",
     name: "Amor 💗",
     lastMessage: "Precisamos conversar...",
-    time: "8:14",
+    time: "",
+    unreadCount: 1,
   },
   {
-    profileImage: "/profile-familia.jpg",
-    name: "Grupo da Família",
-    lastMessage: "Feliz aniversário, João!",
-    time: "7:45",
+    profileImage: "/profile-mecanico.jpg",
+    name: "Tião Mecânico",
+    lastMessage: "🎤 8:23",
+    time: "",
+    unreadCount: 1,
+  },
+  {
+    profileImage: "/profile-chefe.jpg",
+    name: "Chefe",
+    lastMessage: "Passa no RH amanhã",
+    time: "",
+    unreadCount: 1,
+  },
+  {
+    profileImage: "/profile-tecnico.jpg",
+    name: "Técnico Assistência",
+    lastMessage: "Sua placa queimou",
+    time: "",
+    unreadCount: 1,
+  },
+  {
+    profileImage: "/profile.png",
+    name: "João Agiota",
+    lastMessage: "Gravando áudio...",
+    time: "",
+    unreadCount: 2,
   },
 ];
 
 export default function ConversationList() {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [visibleConversations, setVisibleConversations] = useState<Conversation[]>([]);
 
-  // Controla a renderização condicional
+  // 🔄 Cria o áudio só no lado do cliente
+  let notificationSound: HTMLAudioElement | null = null;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Agora temos certeza de que estamos no cliente
+      notificationSound = new Audio("/toque.mp3");
+    }
+
+    const storedConversations = localStorage.getItem("visibleConversations");
+    if (storedConversations) {
+      setVisibleConversations(JSON.parse(storedConversations));
+    } else {
+      const grandmaConversation = { ...conversations[0] };
+
+      setVisibleConversations([grandmaConversation]);
+      localStorage.setItem("visibleConversations", JSON.stringify([grandmaConversation]));
+
+      for (let i = 1; i < conversations.length; i++) {
+        const minDelay = 30000;
+        const randomExtraTime = Math.floor(Math.random() * 15000);
+        const totalDelay = minDelay * i + randomExtraTime;
+
+        setTimeout(() => {
+          const newConversation = {
+            ...conversations[i],
+            time: new Date().toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+
+          setVisibleConversations((prev) => {
+            const voConversation = prev.find((c) => c.name === "Vó");
+            const otherConversations = prev.filter((c) => c.name !== "Vó");
+
+            const updated = voConversation
+              ? [voConversation, newConversation, ...otherConversations]
+              : [newConversation, ...otherConversations];
+
+            localStorage.setItem("visibleConversations", JSON.stringify(updated));
+
+            // ✅ Toca o som de notificação, se o áudio estiver disponível
+            if (notificationSound) {
+              notificationSound.currentTime = 0;
+              notificationSound.play();
+            }
+
+            return updated;
+          });
+        }, totalDelay);
+      }
+    }
+  }, []);
+
   const showOnlyGrandma = searchValue.trim() !== "";
 
   return (
     <>
       <SearchInput
-        // Passa a prop para controlar o valor e onChange no input
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
       />
-
       <div className="flex-1 overflow-y-hidden overflow-x-hidden">
         {showOnlyGrandma ? (
           <>
@@ -70,7 +138,7 @@ export default function ConversationList() {
             <p className="text-gray-400 text-center mt-2 italic">A única que importa</p>
           </>
         ) : (
-          conversations.map((conversation) => (
+          visibleConversations.map((conversation) => (
             <ConversationItem key={conversation.name} {...conversation} />
           ))
         )}
