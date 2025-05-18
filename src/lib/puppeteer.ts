@@ -6,7 +6,7 @@ const PROTOCOL_TIMEOUT = 1000 * 60 * 5; // 5 minutes
 let browser: Browser | null = null;
 
 export async function getBrowser(): Promise<Browser> {
-  if (!browser) {
+  if (!browser || !browser.connected) {
     browser = await puppeteer.launch({
       protocolTimeout: PROTOCOL_TIMEOUT, // 5 minutes
       headless: NODE_ENV !== "development",
