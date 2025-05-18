@@ -1,10 +1,36 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
+import { buffer } from "stream/consumers";
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
   console.log(messages);
+
+  const processBufferResponse = (
+    data: Partial<
+      | {
+          result: { type: string; data: any };
+        }
+      | undefined
+    >
+  ) => {
+    try {
+      if (!Array.isArray(data)) {
+        return false;
+      }
+      if (data[0].result.type !== "Buffer") {
+        return false;
+      }
+      const bufferData = data[0].result.data;
+      const buffer = Buffer.from(bufferData);
+      const base64Image = buffer.toString("base64");
+
+      return base64Image;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch text-black">
       {messages.map((message) => (
@@ -16,6 +42,28 @@ export default function Chat() {
                 return <div key={`${message.id}-${i}`}>{part.text}</div>;
             }
           })}
+          {processBufferResponse(
+            message?.toolInvocations as Partial<
+              | {
+                  result: { type: string; data: any };
+                }
+              | undefined
+            >
+          ) ? (
+            <img
+              src={`data:image/jpeg;base64,${processBufferResponse(
+                message?.toolInvocations as Partial<
+                  | {
+                      result: { type: string; data: any };
+                    }
+                  | undefined
+                >
+              )}`}
+              alt="Imagem"
+            />
+          ) : (
+            ""
+          )}
         </div>
       ))}
 
