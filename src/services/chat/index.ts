@@ -20,10 +20,10 @@ export default class ChatService {
   }
 
   async sendMessage({ history, message }: ChatSendMessageProps) {
-    const { textStream } = this.sytemAPI.buildStreamText({
-      history: history,
-      prompt: message,
-    });
-    await this.sytemAPI.streamMessage({ textStream });
+    // const { textStream } = this.sytemAPI.buildStreamText({
+    //   history: history,
+    //   prompt: message,
+    // });
+    // await this.sytemAPI.streamMessage({ textStream });
   }
 }

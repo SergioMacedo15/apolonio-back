@@ -1,4 +1,4 @@
-import { aiTools, type AIToolsProps } from "@/aiTools";
+import { aiTools, type AIToolsRegistry } from "@/aiTools";
 import { openai } from "@ai-sdk/openai";
 import { streamText, tool, type StreamTextResult } from "ai";
 import { createStreamableValue } from "ai/rsc";
@@ -32,7 +32,7 @@ interface SendMessageProps {
 }
 interface BuildStreamTextProps {
   messages: ContextAPIProps[];
-  tools?: AIToolsProps; // MELHORAR ISSO AQUI
+  tools?: AIToolsRegistry; // Usando o novo tipo
   page: any;
 }
 
@@ -62,7 +62,7 @@ export default class OpenAIService {
           [name]: tool({
             description: info.description,
             parameters: info.schema,
-            execute: async (input) => {
+            execute: async (input: any) => {
               const response = await info.execute(page, input);
               console.log("executou", response);
               return response || {};

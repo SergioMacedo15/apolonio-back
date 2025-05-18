@@ -1,19 +1,26 @@
-import { z, ZodType } from "zod";
-import { openUrl } from "./openUrl";
+import { openUrl, OpenUrlTool } from "./openUrl";
 import { Page } from "puppeteer";
-import { screenshot } from "./screenshot";
-import { getPageInfo } from "./getPageInfo";
-import { fillAiToolInfo } from "./fill";
-import { clickAiToolInfo } from "./click";
-import { pressKeyAiToolInfo } from "./pressKey";
+import { screenshot, ScreenshotTool } from "./screenshot";
+import { getPageInfo, GetPageInfoTool } from "./getPageInfo";
+import { fillAiToolInfo, FillTool } from "./fill";
+import { clickAiToolInfo, ClickTool } from "./click";
+import { pressKeyAiToolInfo, PressKeyTool } from "./pressKey";
+import { goBack, GoBackTool } from "./goBack";
+import { AiTool, AIToolsRegistry } from "./AiTool";
 
-export type AIToolsProps = Record<string, AiToolInfo<any>>;
-
-export type AiToolInfo<Schema extends ZodType = ZodType> = {
-  description: string;
-  schema: Schema;
-  execute: (page: Page, input: z.infer<Schema>) => Promise<any>;
+export {
+  AiTool,
+  OpenUrlTool,
+  ScreenshotTool,
+  GetPageInfoTool,
+  FillTool,
+  ClickTool,
+  PressKeyTool,
+  GoBackTool,
 };
+export type { AIToolsRegistry };
+
+export type AIToolsProps = AIToolsRegistry;
 
 export const aiTools = {
   openUrl,
@@ -22,4 +29,5 @@ export const aiTools = {
   fill: fillAiToolInfo,
   click: clickAiToolInfo,
   pressKey: pressKeyAiToolInfo,
-} as const satisfies AIToolsProps;
+  goBack,
+} as const satisfies AIToolsRegistry;
