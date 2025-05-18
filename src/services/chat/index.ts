@@ -33,7 +33,7 @@ export default class ChatService {
 
   constructor({ mood, page }: ChatServiceProps) {
     this.sytemAPI = new OpenAIService({
-      apiModel: "gpt-4.1",
+      apiModel: "gpt-4.1-nano",
       mood,
       tools: aiTools,
     });

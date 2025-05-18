@@ -4,19 +4,29 @@ import ChatService from "@/services/chat";
 import OpenAIService from "@/services/sdk";
 import type { Page } from "puppeteer";
 
-// Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
-
+type Message = {
+  role: "user" | "assistant" | "system";
+  content: string;
+  parts?: any[];
+  toolInvocations?: any[];
+  [key: string]: any; // aceita outros campos opcionais
+};
 let page: Page | undefined;
 
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
+
+    const simplifiedMessages = messages.map((msg: Message) => ({
+      role: msg.role,
+      content: msg.content,
+    }));
+
     const browser = await getBrowser();
     page = page ? page : await browser.newPage();
 
     const service = new ChatService({ page, mood: systemMessage });
-    service.sendMessage({ messages });
+    service.sendMessage({ messages: simplifiedMessages });
 
     // aguarda a resposta da stream (ou timeout)
     return await service.response.toDataStreamResponse();
