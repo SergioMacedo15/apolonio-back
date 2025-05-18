@@ -34,7 +34,7 @@ const baseConversations: Conversation[] = [
     {
         profileImage: "/profile-familia.jpg",
         name: "Família Buscapé",
-        lastMessage: "Prima Fernanda: Tio Paulo seu corno",
+        lastMessage: "Tia Fernanda: Bom dia familia",
         time: "",
         unreadCount: 1,
     },
