@@ -23,7 +23,7 @@ interface ConversationTimingData {
 }
 
 const grandmaConversation: Conversation = {
-    profileImage: "/profile-old-woman.jpg",
+    profileImage: "/profile-senhora.jpg",
     name: "Dona Dirce",
     lastMessage: "Tá bem",
     time: "",

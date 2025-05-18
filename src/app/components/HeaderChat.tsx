@@ -4,7 +4,7 @@ export default function HeaderChat() {
   return (
     <div className="flex items-center px-4 pt-2 pb-3 bg-gray-800 text-white">
       <Image
-        src="/profile-old-woman.jpg"
+        src="/profile-senhora.jpg"
         alt="Perfil"
         width={40}
         height={40}
