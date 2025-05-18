@@ -1,13 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
-import Image from "next/image";
 import MessageInput from "@/app/components/MessageInput";
 import MessageList from "@/app/components/MessageList";
-import type { ChatRequestOptions, UIMessage } from "ai";
-import { useChat } from "@ai-sdk/react";
-import { SessionStorage } from "@/services/storage/session";
 import { SessionStorageKeys } from "@/storageKeys/sessionStorage";
+import { useChat } from "@ai-sdk/react";
+import type { ChatRequestOptions, UIMessage } from "ai";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useSessionStorage, useUpdateEffect } from "react-use";
+import WinOverlay from "./WinOverlay";
 
 type SessionChat = {
   chatSessionId: string;
@@ -18,10 +18,30 @@ export default function Chat() {
   const [sessionChat, setSessionChat] = useSessionStorage<
     SessionChat | undefined
   >(SessionStorageKeys.CURRENT_CHAT_SESSION_ID);
+  const [showWin, setShowWin] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    function handleResize() {
+      setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleWinClick = () => {
+    setShowWin(true);
+  };
 
   const chatComponent = useChat({
     id: sessionChat?.chatSessionId,
     initialMessages: sessionChat?.messages,
+    async onToolCall({ toolCall }) {
+      if (toolCall.toolName === 'setCompletedInfo') {
+        handleWinClick()
+      }
+    },
   });
   const {
     messages,
@@ -115,6 +135,7 @@ export default function Chat() {
           onSend={submit}
         />
       </div>
+      <WinOverlay show={showWin} width={dimensions.width} height={dimensions.height} />
     </div>
   );
 }

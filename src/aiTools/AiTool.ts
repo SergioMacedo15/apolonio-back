@@ -5,7 +5,7 @@ import { Page } from "puppeteer";
 export abstract class AiTool<Schema extends ZodType = ZodType> {
   abstract description: string;
   abstract schema: Schema;
-  abstract execute(page: Page, input: z.infer<Schema>): Promise<any>;
+  execute?(page: Page, input: z.infer<Schema>): Promise<any>;
 }
 
 // Tipo para o registro de ferramentas
