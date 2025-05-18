@@ -43,3 +43,12 @@ body {
 .animate-shake {
   animation: shake 0.5s;
 }
+
+@layer utilities {
+  .scrollbar-thumb-dark {
+    background-color: #4b5563;
+  }
+  .scrollbar-track-dark {
+    background-color: #1f2937;
+  }
+}
