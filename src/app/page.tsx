@@ -7,9 +7,6 @@ import Chat from "@/app/components/Chat";
 import { useChat } from "@ai-sdk/react";
 
 export default function Home() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
-
-  const handleSendMessage = () => {};
   return (
     <div className="w-full h-full flex">
       <aside className="w-[5%] border-r border-gray-600 bg-gray-900 text-white">
@@ -26,7 +23,7 @@ export default function Home() {
         </div>
 
         <div className="flex-1">
-          <Chat onSend={handleSendMessage} messages={messages} />
+          <Chat />
         </div>
       </div>
     </div>

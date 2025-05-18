@@ -34,6 +34,7 @@ export default class OpenAIService {
     page,
   }: getStreamTextProps): StreamTextResult<{}, never> {
     const streamTextComponent = streamText({
+      maxSteps: 10,
       model: openai(this.tModel),
       system: this.mood,
       messages,
@@ -52,7 +53,7 @@ export default class OpenAIService {
           parameters: info.schema,
           execute: async (input) => {
             const response = await info.execute(page, input);
-            return response || {};
+            return response || { result: "Deu boa" };
           },
         }),
       };

@@ -4,15 +4,16 @@ import type { Page } from "puppeteer";
 import type { IStorage } from "../storage/base";
 import { SessionStorage } from "../storage/session";
 
-type RoleAPIModel = "user" | "system";
+type RolesAPIModel = "user" | "system";
 
-interface ContextAPIProps {
-  role: RoleAPIModel;
+export interface MessageProps {
+  role: RolesAPIModel;
   content: string;
+  time: string;
 }
 
 interface ChatSendMessageProps {
-  messages: ContextAPIProps[];
+  messages: MessageProps[];
 }
 
 interface ChatServiceProps {
@@ -21,7 +22,7 @@ interface ChatServiceProps {
 }
 
 interface PersistMessageProps {
-  messages: ContextAPIProps[];
+  messages: MessageProps[];
 }
 
 export default class ChatService {
