@@ -81,7 +81,7 @@ export default function Chat() {
       id: String(Date.now()),
       role: "assistant",
       content:
-        "Nossa, essa tarefa está me deixando cansada. Vou precisar de um tempinho para descansar, mas depois podemos continuar, tá bem? Obrigada pela ajuda até aqui! 😊",
+        "to cançada aqui vou da uma deitadinha depois nois termina ta bom obrigada viu ce me ajuda bem demais 😊",
     });
     setHasAppendedRestMessage(true);
   }
