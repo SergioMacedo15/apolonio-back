@@ -43,3 +43,26 @@ body {
 .animate-shake {
   animation: shake 0.5s;
 }
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #374151 #1f2c33;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2c33;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #374151;
+  border-radius: 8px;
+  border: 2px solid #1f2c33;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #4b5563;
+}
