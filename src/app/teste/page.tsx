@@ -7,17 +7,18 @@ export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     body: {},
   });
-  console.log(messages);
+  console.log("messages chat", messages);
 
   const processBufferResponse = (
     data: Partial<
       | {
-          result: { type: string; data: any };
-        }
+        result: { type: string; data: any };
+      }
       | undefined
     >
   ) => {
     try {
+      console.log("data processBufferResponse", data)
       if (!Array.isArray(data)) {
         return false;
       }
@@ -27,10 +28,12 @@ export default function Chat() {
       const bufferData = data[0].result.data;
       const buffer = Buffer.from(bufferData);
       const base64Image = buffer.toString("base64");
-
+      console.log("bufferData", bufferData)
+      console.log("buffer", buffer)
+      console.log("base64Image", base64Image)
       return base64Image;
     } catch (error) {
-      console.log(error);
+      console.log("error processBufferResponse", error);
     }
   };
   return (
@@ -47,8 +50,8 @@ export default function Chat() {
           {processBufferResponse(
             message?.toolInvocations as Partial<
               | {
-                  result: { type: string; data: any };
-                }
+                result: { type: string; data: any };
+              }
               | undefined
             >
           ) ? (
@@ -56,8 +59,8 @@ export default function Chat() {
               src={`data:image/jpeg;base64,${processBufferResponse(
                 message?.toolInvocations as Partial<
                   | {
-                      result: { type: string; data: any };
-                    }
+                    result: { type: string; data: any };
+                  }
                   | undefined
                 >
               )}`}
