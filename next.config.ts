@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   images: {
     // remotePatterns: [
     //   {
@@ -8,7 +9,7 @@ const nextConfig: NextConfig = {
     //     hostname: '**',
     //   },
     // ],
-    domains: ['isinaliza.vtexassets.com'],
+    domains: ["isinaliza.vtexassets.com"],
   },
 };
 

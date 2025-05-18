@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  apolonio-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    # Configurações para melhorar o desempenho do Puppeteer em containers
+    cap_add:
+      - SYS_ADMIN
+    shm_size: 1gb  # Aumenta o compartilhamento de memória para o Puppeteer
+    networks:
+      - traefik-proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.codegen-web-service.loadbalancer.server.port=3000"
+      - "traefik.http.routers.codegen-web.rule=Host(`codecon.${DOMAIN}`)"
+      - "traefik.http.routers.codegen-web.entrypoints=websecure"
+      - "traefik.http.routers.codegen-web.tls=true"
+      - "traefik.http.routers.codegen-web.tls.certresolver=letsencrypt"
+
+# Define a rede para conectar múltiplos serviços, se necessário
+networks:
+  traefik-proxy:
+    external: true
