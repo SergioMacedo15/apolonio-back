@@ -50,7 +50,9 @@ export default function Chat() {
     append({
       id: String(Date.now()),
       role: "user",
-      content: `Olá! Bem-vindo(a) ao nosso atendimento. Hoje é ${new Date().toLocaleDateString()}. Como posso ajudar?`,
+      content: `Olá! Bem-vindo(a) ao nosso atendimento. Hoje é ${new Date().toLocaleDateString(
+        "pt-BR"
+      )}. Como posso ajudar?`,
     });
     reload();
   }
