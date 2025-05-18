@@ -1,18 +1,14 @@
 import React from "react";
 import Image from "next/image";
-import type { MessageProps } from "@/services/chat";
 import type { UIMessage } from "ai";
-
-interface ImageContent {
-  type: "image";
-  url: string;
-}
 
 interface MessageItem extends UIMessage {
   time?: string;
+  isLoading?: boolean;
 }
+
 export default function MessageItem(props: MessageItem) {
-  const { role, content, toolInvocations, time } = props;
+  const { role, content, toolInvocations, time, isLoading } = props;
   const isMe = role === "user";
 
   function handleImagesComponente(tool: any) {
@@ -29,17 +25,9 @@ export default function MessageItem(props: MessageItem) {
       return base64Image;
     } catch (error) {
       console.log(error);
+      return false;
     }
   }
-  // Verificar se o conteúdo é uma imagem de maneira segura para o TypeScript
-  // const isImage =
-  //   typeof content === "object" &&
-  //   content !== null &&
-  //   "type" in content &&
-  //   content.type === "image";
-
-  // Obter a URL da imagem apenas se for uma imagem
-  // const imageUrl = isImage ? (content as ImageContent).url : "";
 
   return (
     <div className={`flex ${isMe ? "justify-end" : "justify-start"} mb-4`}>
@@ -58,11 +46,51 @@ export default function MessageItem(props: MessageItem) {
             />
           </div>
         )}
-        {content && <p>{content as string}</p>}
+
+        {isLoading ? <LoadingDots /> : content && <p>{content as string}</p>}
+
         <span className="text-xs text-gray-300 mt-1 block text-right">
           {time}
         </span>
       </div>
     </div>
+  );
+}
+function LoadingDots() {
+  return (
+    <span className="loading-dots flex space-x-1">
+      <style jsx>{`
+        .loading-dots span {
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background-color: white;
+          border-radius: 50%;
+          animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .loading-dots span:nth-child(1) {
+          animation-delay: -0.32s;
+        }
+        .loading-dots span:nth-child(2) {
+          animation-delay: -0.16s;
+        }
+        .loading-dots span:nth-child(3) {
+          animation-delay: 0;
+        }
+        @keyframes bounce {
+          0%,
+          80%,
+          100% {
+            transform: translateY(0);
+          }
+          40% {
+            transform: translateY(-8px);
+          }
+        }
+      `}</style>
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
   );
 }

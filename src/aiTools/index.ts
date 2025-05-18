@@ -11,7 +11,7 @@ import { AiTool, AIToolsRegistry } from "./AiTool";
 export {
   AiTool,
   OpenUrlTool,
-  ScreenshotTool,
+  // ScreenshotTool,
   GetPageInfoTool,
   FillTool,
   ClickTool,
