@@ -1,12 +1,28 @@
+"use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import MessageInput from "@/app/components/MessageInput";
 import MessageList from "@/app/components/MessageList";
-import type { ChatRequestOptions } from "ai";
+import type { ChatRequestOptions, UIMessage } from "ai";
 import { useChat } from "@ai-sdk/react";
+import { SessionStorage } from "@/services/storage/session";
+import { SessionStorageKeys } from "@/storageKeys/sessionStorage";
+import { useSessionStorage, useUpdateEffect } from "react-use";
+
+type SessionChat = {
+  chatSessionId: string;
+  messages: UIMessage[];
+};
 
 export default function Chat() {
-  const chatComponent = useChat();
+  const [sessionChat, setSessionChat] = useSessionStorage<
+    SessionChat | undefined
+  >(SessionStorageKeys.CURRENT_CHAT_SESSION_ID);
+
+  const chatComponent = useChat({
+    id: sessionChat?.chatSessionId,
+    initialMessages: sessionChat?.messages,
+  });
   const {
     messages,
     input,
@@ -15,9 +31,9 @@ export default function Chat() {
     error,
     isLoading,
     append,
-    metadata,
     reload,
     stop,
+    id,
   } = chatComponent;
 
   // Controle para evitar append repetido da mensagem de descanso
@@ -62,14 +78,24 @@ export default function Chat() {
   }
 
   useEffect(() => {
-    startChat();
+    if (!sessionChat || sessionChat.messages.length <= 0) {
+      startChat();
+    }
   }, []);
+
   useEffect(() => {
     if (error && !hasAppendedRestMessage) {
       if (typeof stop === "function") stop();
       controllErrorConnection();
     }
   }, [error, hasAppendedRestMessage, stop]);
+
+  useUpdateEffect(() => {
+    setSessionChat({
+      chatSessionId: id,
+      messages,
+    });
+  }, [id, messages]);
 
   return (
     <div className="flex-1 relative h-full select-none">

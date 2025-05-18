@@ -1,8 +1,5 @@
-import { getBrowser } from "@/lib/puppeteer";
 import { systemMessage } from "@/services/characters";
 import ChatService from "@/services/chat";
-import OpenAIService from "@/services/sdk";
-import type { Page } from "puppeteer";
 
 type Message = {
   role: "user" | "assistant" | "system";
@@ -11,22 +8,21 @@ type Message = {
   toolInvocations?: any[];
   [key: string]: any; // aceita outros campos opcionais
 };
-let page: Page | undefined;
-
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const { id, messages } = await req.json();
     const simplifiedMessages = messages
       .slice(-4) // pega só os últimos 4 elementos
       .map((msg: Message) => ({
         role: msg.role,
         content: msg.content,
       }));
-    const browser = await getBrowser();
-    page = page ? page : await browser.newPage();
 
-    const service = new ChatService({ page, mood: systemMessage });
-    service.sendMessage({ messages: simplifiedMessages });
+    const service = new ChatService({ mood: systemMessage });
+    await service.sendMessage({
+      chatSessionId: id,
+      messages: simplifiedMessages,
+    });
 
     // aguarda a resposta da stream (ou timeout)
     return await service.response.toDataStreamResponse();
