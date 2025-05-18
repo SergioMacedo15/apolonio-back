@@ -11,9 +11,7 @@ let page: Page | undefined;
 export async function POST(req: Request) {
   const { messages } = await req.json();
   const browser = await getBrowser();
-
   page = page ? page : await browser.newPage();
-  console.log(page);
   const service = new ChatService({ page, mood: "" });
   service.sendMessage({ messages });
   return service.response.toDataStreamResponse();
