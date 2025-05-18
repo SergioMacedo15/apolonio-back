@@ -4,6 +4,12 @@ Apolonio é um simulador interativo que ajuda uma senhora idosa (a avó do perso
 
 ---
 
+## Demonstração
+
+![Demonstração do Apolonio](public/demo.jpg)
+
+---
+
 ## Tecnologias Utilizadas
 
 - Next.js 15.3.2  
@@ -30,7 +36,7 @@ Apolonio é um simulador interativo que ajuda uma senhora idosa (a avó do perso
 ## Instalação e Uso
 
 1. Clone o repositório:  
-   git clone https://seu-repositorio.git
+   git clone https://github.com/SergioMacedo15/apolonio-back.git
 
 2. Instale as dependências:  
    npm install
