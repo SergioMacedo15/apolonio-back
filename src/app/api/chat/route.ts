@@ -1,4 +1,5 @@
 import { getBrowser } from "@/lib/puppeteer";
+import { systemMessage } from "@/services/characters";
 import ChatService from "@/services/chat";
 import OpenAIService from "@/services/sdk";
 import type { Page } from "puppeteer";
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
   const browser = await getBrowser();
   page = page ? page : await browser.newPage();
-  const service = new ChatService({ page, mood: "" });
+  const service = new ChatService({ page, mood: systemMessage });
   service.sendMessage({ messages });
   return service.response.toDataStreamResponse();
 }
