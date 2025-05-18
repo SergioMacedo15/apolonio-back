@@ -95,7 +95,7 @@ export default function ConversationList() {
     } else {
       const now = Date.now();
       const scheduledConversations = baseConversations.map((_, index) => {
-        const minDelay = 30000;
+        const minDelay = 17000;
         const randomExtraTime = Math.floor(Math.random() * 15000);
         const totalDelay = minDelay * (index + 1) + randomExtraTime;
         
