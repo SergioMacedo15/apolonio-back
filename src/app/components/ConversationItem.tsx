@@ -27,7 +27,7 @@ export default function ConversationItem({profileImage, name, lastMessage, time}
 
         toast.error(`Foco na missão, soldado!`, {
             position: "top-right",
-            autoClose: 1000,
+            autoClose: 1700,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: true,
