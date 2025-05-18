@@ -7,6 +7,7 @@ import { clickAiToolInfo, ClickTool } from "./click";
 import { pressKeyAiToolInfo, PressKeyTool } from "./pressKey";
 import { goBack, GoBackTool } from "./goBack";
 import { AiTool, AIToolsRegistry } from "./AiTool";
+import { setCompletedInfo, SetCompletedInfoTool } from "./setCompletedInfo";
 
 export {
   AiTool,
@@ -17,6 +18,7 @@ export {
   ClickTool,
   PressKeyTool,
   GoBackTool,
+  SetCompletedInfoTool
 };
 export type { AIToolsRegistry };
 
@@ -26,6 +28,7 @@ export const aiTools = {
   openUrl,
   screenshot,
   getPageInfo,
+  setCompletedInfo,
   fill: fillAiToolInfo,
   click: clickAiToolInfo,
   pressKey: pressKeyAiToolInfo,
