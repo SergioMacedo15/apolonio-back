@@ -30,6 +30,9 @@ const grandmaConversation: Conversation = {
     unreadCount: 1,
 };
 
+// Fixed timestamps as requested
+const fixedTimes = ["8:13", "9:21", "10:57", "11:05", "12:33", "13:42"];
+
 const baseConversations: Conversation[] = [
     {
         profileImage: "/profile-familia.jpg",
@@ -94,7 +97,7 @@ export default function ConversationList() {
         } else {
             const now = Date.now();
             const scheduledConversations = baseConversations.map((_, index) => {
-                const minDelay = 17000;
+                const minDelay = 13000;
                 const randomExtraTime = Math.floor(Math.random() * 15000);
                 const totalDelay = minDelay * (index + 1) + randomExtraTime;
 
@@ -119,12 +122,12 @@ export default function ConversationList() {
 
             if (remainingDelay > 0) {
                 setTimeout(() => {
+                    // Use fixed time from array instead of current time
+                    const timeIndex = scheduled.conversationIndex % fixedTimes.length;
+                    
                     const conversationToAdd = {
                         ...baseConversations[scheduled.conversationIndex],
-                        time: new Date().toLocaleTimeString("pt-BR", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        }),
+                        time: fixedTimes[timeIndex],
                     };
 
                     setVisibleConversations((prev) => {
