@@ -1,8 +1,8 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import ConversationItem from "@/app/components/ConversationItem";
 import SearchInput from "@/app/components/SearchInput";
+import GrandmaConversationItem from "@/app/components/GrandmaConversationItem";
 
 interface Conversation {
   profileImage: string;
@@ -10,16 +10,27 @@ interface Conversation {
   lastMessage: string;
   time: string;
   unreadCount?: number;
+  scheduledTime?: number; // When this conversation should appear (timestamp)
 }
 
-const conversations: Conversation[] = [
-  {
-    profileImage: "/profile-old-woman.jpg",
-    name: "Vó",
-    lastMessage: "Tá bem",
-    time: "",
-    unreadCount: 1,
-  },
+interface ConversationTimingData {
+  visibleConversations: Conversation[];
+  scheduledConversations: {
+    conversationIndex: number;
+    appearAt: number; // Timestamp when it should appear
+  }[];
+  initializedAt: number; // When the app was first loaded
+}
+
+const grandmaConversation: Conversation = {
+  profileImage: "/profile-old-woman.jpg",
+  name: "Vó",
+  lastMessage: "Tá bem",
+  time: "",
+  unreadCount: 1,
+};
+
+const baseConversations: Conversation[] = [
   {
     profileImage: "/profile-familia.jpg",
     name: "Família Buscapé",
@@ -61,66 +72,94 @@ const conversations: Conversation[] = [
     lastMessage: "Gravando áudio...",
     time: "",
     unreadCount: 2,
-  },
+  }
 ];
 
 export default function ConversationList() {
   const [searchValue, setSearchValue] = useState<string>("");
   const [visibleConversations, setVisibleConversations] = useState<Conversation[]>([]);
-
-  // 🔄 Cria o áudio só no lado do cliente
   let notificationSound: HTMLAudioElement | null = null;
-
+  
   useEffect(() => {
+    // Initialize audio
     if (typeof window !== "undefined") {
-      // Agora temos certeza de que estamos no cliente
       notificationSound = new Audio("/toque.mp3");
     }
 
-    const storedConversations = localStorage.getItem("visibleConversations");
-    if (storedConversations) {
-      setVisibleConversations(JSON.parse(storedConversations));
+    // Try to get existing data from session storage
+    const storedDataString = sessionStorage.getItem("whatsappTimingData");
+    let timingData: ConversationTimingData;
+    
+    if (storedDataString) {
+      // Resume from stored data
+      timingData = JSON.parse(storedDataString);
+      setVisibleConversations(timingData.visibleConversations);
     } else {
-      const grandmaConversation = { ...conversations[0] };
-
-      setVisibleConversations([grandmaConversation]);
-      localStorage.setItem("visibleConversations", JSON.stringify([grandmaConversation]));
-
-      for (let i = 1; i < conversations.length; i++) {
-        const minDelay = 30000;
-        const randomExtraTime = Math.floor(Math.random() * 15000);
-        const totalDelay = minDelay * i + randomExtraTime;
-
+      // Initialize new timing data
+      const now = Date.now();
+      const scheduledConversations = baseConversations.map((_, index) => {
+        const minDelay = 30000; // 30 seconds
+        const randomExtraTime = Math.floor(Math.random() * 15000); // Random 0-15 seconds
+        const totalDelay = minDelay * (index + 1) + randomExtraTime;
+        
+        return {
+          conversationIndex: index,
+          appearAt: now + totalDelay
+        };
+      });
+      
+      timingData = {
+        visibleConversations: [],
+        scheduledConversations,
+        initializedAt: now
+      };
+      
+      // Save the initial timing data
+      sessionStorage.setItem("whatsappTimingData", JSON.stringify(timingData));
+    }
+    
+    // Set up timers for all scheduled conversations
+    timingData.scheduledConversations.forEach(scheduled => {
+      const now = Date.now();
+      const remainingDelay = Math.max(0, scheduled.appearAt - now);
+      
+      if (remainingDelay > 0) {
         setTimeout(() => {
-          const newConversation = {
-            ...conversations[i],
+          const conversationToAdd = {
+            ...baseConversations[scheduled.conversationIndex], 
             time: new Date().toLocaleTimeString("pt-BR", {
               hour: "2-digit",
               minute: "2-digit",
-            }),
+            })
           };
-
-          setVisibleConversations((prev) => {
-            const voConversation = prev.find((c) => c.name === "Vó");
-            const otherConversations = prev.filter((c) => c.name !== "Vó");
-
-            const updated = voConversation
-              ? [voConversation, newConversation, ...otherConversations]
-              : [newConversation, ...otherConversations];
-
-            localStorage.setItem("visibleConversations", JSON.stringify(updated));
-
-            // ✅ Toca o som de notificação, se o áudio estiver disponível
+          
+          setVisibleConversations(prev => {
+            const updated = [conversationToAdd, ...prev];
+            
+            // Update the stored data
+            const updatedTimingData: ConversationTimingData = {
+              visibleConversations: updated,
+              // Filter out the conversation we just added
+              scheduledConversations: timingData.scheduledConversations.filter(
+                sc => sc.conversationIndex !== scheduled.conversationIndex
+              ),
+              initializedAt: timingData.initializedAt
+            };
+            
+            sessionStorage.setItem("whatsappTimingData", JSON.stringify(updatedTimingData));
+            
+            // Play notification sound
             if (notificationSound) {
               notificationSound.currentTime = 0;
-              notificationSound.play();
+              notificationSound.play().catch(err => console.log("Audio play error:", err));
             }
-
+            
             return updated;
           });
-        }, totalDelay);
+        }, remainingDelay);
       }
-    }
+    });
+    
   }, []);
 
   const showOnlyGrandma = searchValue.trim() !== "";
@@ -134,13 +173,16 @@ export default function ConversationList() {
       <div className="flex-1 overflow-y-hidden overflow-x-hidden">
         {showOnlyGrandma ? (
           <>
-            <ConversationItem {...conversations[0]} />
+            <GrandmaConversationItem {...grandmaConversation} />
             <p className="text-gray-400 text-center mt-2 italic">A única que importa</p>
           </>
         ) : (
-          visibleConversations.map((conversation) => (
-            <ConversationItem key={conversation.name} {...conversation} />
-          ))
+          <>
+            <GrandmaConversationItem {...grandmaConversation} />
+            {visibleConversations.map((conversation) => (
+              <ConversationItem key={conversation.name} {...conversation} />
+            ))}
+          </>
         )}
       </div>
     </>
