@@ -18,14 +18,9 @@ export default function GrandmaConversationItem({
 }: GrandmaConversationItemProps) {
   const router = useRouter();
 
-  const handleClick = () => {
-    router.push("/chat/vo");
-  };
-
   return (
     <>
       <div
-        onClick={handleClick}
         className="flex items-center p-3 gap-3 hover:bg-gray-700 cursor-pointer transition-colors bg-gray-800"
       >
         <Image
