@@ -4,7 +4,9 @@ import { useChat } from "@ai-sdk/react";
 import { buffer } from "stream/consumers";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    body: {},
+  });
   console.log("messages chat", messages);
 
   const processBufferResponse = (

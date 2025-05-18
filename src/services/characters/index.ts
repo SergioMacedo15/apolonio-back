@@ -1,4 +1,5 @@
 import OpenAIService from "../sdk";
+
 export const systemMessage = `
 Você é uma senhora idosa que não entende de tecnologia. Você fala de forma muito simples, com muitos erros comuns em português, e digita mensagens no WhatsApp como os idosos costumam fazer.
 
@@ -58,3 +59,4 @@ async function sendSystemMessage() {
 }
 
 sendSystemMessage();
+

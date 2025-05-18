@@ -1,5 +1,5 @@
 import { getBrowser } from "@/lib/puppeteer";
-import { systemMessage } from "@/services/characters";
+import ChatService from "@/services/chat";
 import OpenAIService from "@/services/sdk";
 import type { Page } from "puppeteer";
 
@@ -12,16 +12,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
   const browser = await getBrowser();
   page = page ? page : await browser.newPage();
-  console.log("browser", browser)
-  console.log("page", page)
-  console.log("messages", messages)
-  const service = new OpenAIService("gpt-4.1-mini", systemMessage);
-
-  const result = service.buildStreamText({
-    messages: messages,
-    page,
-  });
-  console.log("RESPOSTA OPEN AI", result);
-
-  return result.toDataStreamResponse();
+  const service = new ChatService({ page, mood: "" });
+  service.sendMessage({ messages });
+  return service.response.toDataStreamResponse();
 }
