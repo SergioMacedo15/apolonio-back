@@ -1,26 +1,31 @@
-# Apolonio
+# ApolonioOldChat
 
-Apolonio é um simulador interativo que ajuda uma senhora idosa com tarefas simples do dia a dia que para gerações mais jovens são fáceis, mas para ela representam desafios. A interface do simulador é uma reprodução do WhatsApp, onde o jogador pode conversar apenas com a senhora, que pedirá ajuda para realizar atividades como pesquisar receitas ou assistir a missas no YouTube, exigindo muita paciência.
+
+ApolonioOldChat é um simulador interativo que ajuda uma senhora idosa com tarefas simples do dia a dia que para gerações mais jovens são fáceis, mas para ela representam desafios. A interface do simulador é uma reprodução do WhatsApp, onde o jogador pode conversar apenas com a senhora, que pedirá ajuda para realizar atividades como pesquisar receitas ou assistir a missas no YouTube, exigindo muita paciência.
 
 ---
 
 ## Demonstração
 
-![Demonstração do Apolonio](public/demo.jpg)
+![Demonstração do ApolonioOldChat](public/demo.jpg)
 
 ---
 
 ## Tecnologias Utilizadas
 
-- Next.js 15.3.2  
-- React 19.0.0  
-- TypeScript 5  
-- TailwindCSS 4  
-- Zod 3.24.4  
-- Puppeteer 24.8.2  
-- React Toastify 11.0.5  
-- OpenAI SDK (@ai-sdk/openai e @ai-sdk/react)  
-- Heroicons React 2.2.0  
+- **Next.js** 15.3.2  
+- **React** 19.0.0  
+- **React DOM** 19.0.0  
+- **TypeScript** 5  
+- **TailwindCSS** 4  
+- **Zod** 3.24.4  
+- **Puppeteer** 24.8.2  
+- **React Toastify** 11.0.5  
+- **OpenAI SDK** (ai, @ai-sdk/openai, @ai-sdk/react)  
+- **Heroicons React** 2.2.0  
+- **Framer Motion** 12.12.1  
+- **React Confetti** 6.4.0  
+- **React Use** 17.6.0  
 
 ---
 
@@ -36,7 +41,7 @@ Apolonio é um simulador interativo que ajuda uma senhora idosa com tarefas simp
 ## Instalação e Uso
 
 1. Clone o repositório:  
-   git clone https://github.com/SergioMacedo15/apolonio-back.git
+   git clone https://github.com/SergioMacedo15/apolonioOldChat.git
 
 2. Instale as dependências:  
    npm install
@@ -48,16 +53,6 @@ Apolonio é um simulador interativo que ajuda uma senhora idosa com tarefas simp
    http://localhost:3000
 
 5. Comece a ajudar a senhora nas tarefas pelo chat.
-
----
-
-## Estrutura do Projeto
-
-- /pages — Páginas e rotas do Next.js.  
-- /components — Componentes React para o chat, mensagens, interface.  
-- /lib — Lógica e integrações com APIs (ex: OpenAI, Puppeteer).  
-- /styles — Arquivos de estilos e configuração do TailwindCSS.  
-- /public — Assets públicos como imagens e ícones.  
 
 ---
 
