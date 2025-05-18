@@ -20,7 +20,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.codegen-web-service.loadbalancer.server.port=3000"
-      - "traefik.http.routers.codegen-web.rule=Host(`codegen.${DOMAIN}`)"
+      - "traefik.http.routers.codegen-web.rule=Host(`codecon.${DOMAIN}`)"
       - "traefik.http.routers.codegen-web.entrypoints=websecure"
       - "traefik.http.routers.codegen-web.tls=true"
       - "traefik.http.routers.codegen-web.tls.certresolver=letsencrypt"
