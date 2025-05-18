@@ -16,6 +16,7 @@ export default function Chat() {
     isLoading,
     append,
     metadata,
+    reload,
     stop,
   } = chatComponent;
 
@@ -45,6 +46,18 @@ export default function Chat() {
     setHasAppendedRestMessage(true);
   }
 
+  function startChat() {
+    append({
+      id: String(Date.now()),
+      role: "user",
+      content: `Olá! Bem-vindo(a) ao nosso atendimento. Hoje é ${new Date().toLocaleDateString()}. Como posso ajudar?`,
+    });
+    reload();
+  }
+
+  useEffect(() => {
+    startChat();
+  }, []);
   useEffect(() => {
     if (error && !hasAppendedRestMessage) {
       if (typeof stop === "function") stop();
