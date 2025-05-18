@@ -13,12 +13,16 @@ export default function WinOverlay({ show, width, height }: WinOverlayProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-  if (show && audioRef.current) {
-    sessionStorage.clear();
-    audioRef.current.currentTime = 0;
-    audioRef.current.play();
-  }
-}, [show]);
+    if (show && audioRef.current) {
+      sessionStorage.clear();
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    }
+  }, [show]);
+
+  const handleRestart = () => {
+    window.location.reload();
+  };
 
   return (
     <AnimatePresence>
@@ -63,7 +67,6 @@ export default function WinOverlay({ show, width, height }: WinOverlayProps) {
               You Win
             </motion.div>
 
-            {/* Troféu */}
             <motion.div
               className="text-white select-none"
               initial={{ scale: 0 }}
@@ -73,6 +76,16 @@ export default function WinOverlay({ show, width, height }: WinOverlayProps) {
             >
               🏆
             </motion.div>
+
+            <motion.button
+              className="mt-8 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl z-50 cursor-pointer"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleRestart}
+            >
+              🔄 Restart Game
+            </motion.button>
           </motion.div>
 
           <audio ref={audioRef} src="/win.mp3" preload="auto" />
