@@ -43,8 +43,8 @@ const conversations = [
   },
   {
     profileImage: "/profile-familia.jpg",
-    name: "Grupo da Família",
-    lastMessage: "Feliz aniversário, João!",
+    name: "Família Buscapé",
+    lastMessage: "Prima Fernanda: Tio Paulo seu corno",
     time: "7:45",
   },
 ];

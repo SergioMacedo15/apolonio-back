@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import {Cog6ToothIcon} from "@heroicons/react/24/solid";
+import {UserCircleIcon} from "@heroicons/react/24/solid";
 import {useState, useRef} from "react";
 import {toast} from "react-toastify";
 
@@ -37,7 +37,7 @@ export default function Sidebar() {
                 <Cog6ToothIcon className={`w-6 h-6 text-white transition-transform ${isRotating ? "animate-spin" : ""}`} />
             </button>
 
-            <Image src="/profile.png" alt="Perfil" width={48} height={48} className="rounded-full" />
+            <UserCircleIcon className={`w-14 h-14 text-white transition-transform`} />
         </div>
     );
 }
