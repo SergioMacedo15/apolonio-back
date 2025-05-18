@@ -52,8 +52,13 @@ export default class OpenAIService {
           description: info.description,
           parameters: info.schema,
           execute: async (input) => {
-            const response = await info.execute(page, input);
-            return response || { result: "Deu boa" };
+            try {
+              const response = await info.execute(page, input);
+              return response || { result: "Deu boa" };
+            } catch (error) {
+              console.log(error);
+              return { error: error };
+            }
           },
         }),
       };
