@@ -1,7 +1,5 @@
-import { aiTools, type AIToolsProps } from "@/aiTools";
 import { openai } from "@ai-sdk/openai";
 import { streamText, tool, type StreamTextResult } from "ai";
-import { createStreamableValue } from "ai/rsc";
 import type { OpenAIModel, RoleAPIModel } from "./types";
 
 interface ContextAPIProps {
@@ -9,31 +7,32 @@ interface ContextAPIProps {
   content: string;
 }
 
-interface SendMessageProps {
-  textStream: string;
-}
-interface BuildStreamTextProps {
+interface getStreamTextProps {
   messages: ContextAPIProps[];
   page: any;
+}
+interface OpenAIServerProps {
+  apiModel: OpenAIModel;
+  mood: string;
+  tools: object;
 }
 
 export default class OpenAIService {
   private tModel: OpenAIModel;
   private mood: string;
-  public god: any;
-  public stream: SendMessageProps | any;
   private tools: object;
+  public response: any;
 
-  constructor(apiModel: OpenAIModel, mood: string, tools: object) {
+  constructor({ apiModel, mood, tools }: OpenAIServerProps) {
     this.tModel = apiModel;
     this.mood = mood;
     this.tools = tools;
   }
 
-  buildStreamText({
+  getStreamText({
     messages,
     page,
-  }: BuildStreamTextProps): StreamTextResult<{}, never> {
+  }: getStreamTextProps): StreamTextResult<{}, never> {
     const streamTextComponent = streamText({
       model: openai(this.tModel),
       system: this.mood,
@@ -53,7 +52,6 @@ export default class OpenAIService {
           parameters: info.schema,
           execute: async (input) => {
             const response = await info.execute(page, input);
-            console.log("executou", response);
             return response || {};
           },
         }),
