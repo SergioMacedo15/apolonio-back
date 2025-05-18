@@ -11,7 +11,7 @@ export default function HeaderChat() {
         className="rounded-full mr-3"
       />
       <div>
-        <p className="text-sm font-medium">Vó</p>
+        <p className="text-sm font-medium">Dona Dirce</p>
         <p className="text-xs text-green-500">Online</p>
       </div>
     </div>

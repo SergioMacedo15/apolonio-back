@@ -23,7 +23,6 @@ export default function ConversationItem({
   const isShakingRef = useRef(false);
 
   const handleClick = () => {
-    // Não aplicar efeito de shake para a vó (agora tratado em componente separado)
     if (isShakingRef.current) return;
     
     setIsShaking(true);

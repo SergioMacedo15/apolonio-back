@@ -24,7 +24,7 @@ interface ConversationTimingData {
 
 const grandmaConversation: Conversation = {
   profileImage: "/profile-old-woman.jpg",
-  name: "Vó",
+  name: "Dona Dirce",
   lastMessage: "Tá bem",
   time: "",
   unreadCount: 1,
@@ -81,7 +81,6 @@ export default function ConversationList() {
   let notificationSound: HTMLAudioElement | null = null;
   
   useEffect(() => {
-    // Initialize audio
     if (typeof window !== "undefined") {
       notificationSound = new Audio("/toque.mp3");
     }

@@ -1,6 +1,6 @@
 # Apolonio
 
-Apolonio é um simulador interativo que ajuda uma senhora idosa (a avó do personagem) com tarefas simples do dia a dia que para gerações mais jovens são fáceis, mas para ela representam desafios. A interface do simulador é uma reprodução do WhatsApp, onde o jogador pode conversar apenas com sua avó, que pedirá ajuda para realizar atividades como pesquisar receitas ou assistir a missas no YouTube, exigindo muita paciência.
+Apolonio é um simulador interativo que ajuda uma senhora idosa com tarefas simples do dia a dia que para gerações mais jovens são fáceis, mas para ela representam desafios. A interface do simulador é uma reprodução do WhatsApp, onde o jogador pode conversar apenas com a senhora, que pedirá ajuda para realizar atividades como pesquisar receitas ou assistir a missas no YouTube, exigindo muita paciência.
 
 ---
 
@@ -47,7 +47,7 @@ Apolonio é um simulador interativo que ajuda uma senhora idosa (a avó do perso
 4. Acesse no navegador:  
    http://localhost:3000
 
-5. Comece a ajudar a avó nas tarefas pelo chat.
+5. Comece a ajudar a senhora nas tarefas pelo chat.
 
 ---
 
@@ -72,7 +72,7 @@ Criar uma experiência que estimule a paciência e a empatia ao ajudar uma pesso
 - Suporte a múltiplas tarefas simultâneas.  
 - Funcionalidade de videochamadas ou comandos de voz.  
 - Melhorias em acessibilidade (textos maiores, leitura em voz alta).  
-- Expansão do repertório de tarefas da avó.  
+- Expansão do repertório de tarefas da senhora.  
 
 ---
 
