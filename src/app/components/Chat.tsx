@@ -31,6 +31,10 @@ export default function Chat() {
       if (!isLoading && !error) {
         handleSubmit(event, chatRequestOptions);
       }
+      if (error) {
+        stop();
+        reload();
+      }
     } catch (error) {
       console.error(error);
     }

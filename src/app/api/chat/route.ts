@@ -16,12 +16,12 @@ let page: Page | undefined;
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
-
-    const simplifiedMessages = messages.map((msg: Message) => ({
-      role: msg.role,
-      content: msg.content,
-    }));
-
+    const simplifiedMessages = messages
+      .slice(-4) // pega só os últimos 4 elementos
+      .map((msg: Message) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
     const browser = await getBrowser();
     page = page ? page : await browser.newPage();
 
